@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.UtilDao">
+	<select id="getSidos" resultMap="sidoMap">
+		SELECT * FROM sidos
+	</select>
+	
+	<select id="getGungusBySidoCode" resultMap="gunguMap">
+		SELECT * FROM guguns where sido_code=#{sidoCode}
+	</select>
+	
+	<select id="getContentTypes" resultMap="contentTypeMap">
+		SELECT * FROM contenttypes
+	</select>
+	
+	<resultMap id="sidoMap" type="com.ssafy.kiriya.model.dto.Pair">
+	    <id property="code" column="sido_code"/>
+	    <result property="name" column="sido_name"/>
+	</resultMap>
+	
+	<resultMap id="gunguMap" type="com.ssafy.kiriya.model.dto.Pair">
+	    <id property="code" column="gugun_code"/>
+	    <result property="name" column="gugun_name"/>
+	</resultMap>
+	
+	<resultMap id="contentTypeMap" type="com.ssafy.kiriya.model.dto.Pair">
+	    <id property="code" column="content_type_id"/>
+	    <result property="name" column="content_type_name"/>
+	</resultMap>
+</mapper>

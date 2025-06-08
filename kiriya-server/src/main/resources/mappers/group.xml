@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.GroupDao">
+
+	<insert id="createGroup" parameterType="Group"
+		useGeneratedKeys="true" keyProperty="gno">
+		INSERT INTO
+		`groups`(mno,name,description)
+		VALUES(#{mno},#{name},#{description})
+	</insert>
+
+	<insert id="addGroupMember" parameterType="map">
+		INSERT INTO
+		group_members(gno, mno, role)
+		VALUES(#{gno},#{mno},#{role})
+	</insert>
+
+	<select id="selectGroupByGno" parameterType="int"
+		resultType="Group">
+		SELECT gno, mno, name, description,
+		created_at AS createdAt, updated_at AS updatedAt
+		FROM `groups`
+		WHERE gno = #{gno}
+	</select>
+
+	<!-- 내가 속한 그룹 목록 조회 -->
+	<select id="selectGroupsByMember" parameterType="int"
+		resultType="Group">
+		SELECT g.gno, g.mno, g.name, g.description, g.created_at As
+		createdAt,
+		g.updated_at as updatedAt
+		FROM `groups` g JOIN
+		`group_members` gm
+		ON g.gno = gm.gno
+		WHERE gm.mno=#{mno}
+		ORDER BY
+		g.created_at DESC
+	</select>
+
+	<!-- 그룹 멤버 목록 조회 -->
+	<select id="selectMembersByGroup" parameterType="int"
+		resultMap="groupMemberMap">
+		SELECT gm.no, gm.gno, gm.mno, gm.role, gm.joined_at AS
+		joinedAt, m.name as memberName, m.email AS memberEmail, m.profile_url AS profileUrl
+		FROM `group_members` gm JOIN `members` m
+		ON gm.mno = m.mno
+		WHERE
+		gm.gno=#{gno}
+		ORDER BY joined_at
+	</select>
+
+	<!-- 그룹 기본 정보 수정 -->
+	<update id="updateGroup" parameterType="Group">
+		UPDATE `groups`
+		SET name = #{name}, description = #{description}, updated_at = NOW()
+		WHERE gno = #{gno}
+	</update>
+	
+	<!-- 그룹 멤버 삭제 -->
+	<delete id="deleteGroupMember" parameterType="map">
+		DELETE FROM `group_members`
+		WHERE gno= #{gno}
+		AND mno = #{mno}
+	</delete>
+	
+	<!-- 그룹 모든 멤버 삭제 -->
+	<delete id="deleteGroupMembers" parameterType="int">
+		DELETE FROM `group_members`
+		WHERE gno= #{gno}
+	</delete>
+	
+	<!-- 그룹 삭제 -->
+	<delete id="deleteGroup" parameterType="int">
+		DELETE FROM `groups`
+		WHERE gno = #{gno}
+	</delete>
+	<resultMap id="groupMemberMap" type="GroupMember">
+		<id column="no" property="no" />
+		<result column="gno" property="gno" />
+		<result column="mno" property="mno" />
+		<result column="role" property="role" />
+		<result column="joinedAt" property="joinedAt" />
+		<result column="memberName" property="memberName" />
+		<result column="profileUrl" property="profileUrl" />
+	</resultMap>
+
+</mapper>

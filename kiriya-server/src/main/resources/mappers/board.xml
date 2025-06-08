@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.BoardDao">
+
+	<insert id="add" parameterType="Board" useGeneratedKeys="true"
+		keyProperty="bno">
+		INSERT INTO boards(title,content,mno)
+		VALUES(#{title},#{content},#{mno})
+	</insert>
+
+	<select id="getBytitle" resultMap="boardMap">
+		SELECT bno,title,content,mno,created_at,updated_at,name
+		FROM boards JOIN members USING (mno)
+		WHERE title=#{title}
+	</select>
+
+	<select id="getAllBoards" resultMap="boardMap">
+		SELECT b.bno, b.title, b.content, b.mno, b.created_at, b.updated_at, m.name, m.profile_url,
+		COUNT(bl.bno) as likes, 
+		(SELECT COUNT(*) FROM comments c WHERE c.bno = b.bno) as comment_count,
+		EXISTS ( SELECT 1 FROM board_likes bl2 
+				WHERE bl2.bno = b.bno AND bl2.mno = #{mno}
+    	) AND #{mno} != 0 AS liked
+		FROM boards b 
+		JOIN members m ON b.mno = m.mno
+		LEFT JOIN board_likes bl ON b.bno = bl.bno
+		GROUP BY b.bno
+		ORDER BY b.created_at DESC;
+	</select>
+
+	<update id="set">
+		UPDATE boards SET title=#{title}, content=#{content}
+		WHERE bno=#{bno}
+	</update>
+
+	<select id="getAllLikes">
+		SELECT count(*)
+		FROM board_likes
+		WHERE bno=#{bno}
+	</select>
+
+	<select id="getLike">
+		SELECT count(*)
+		FROM board_likes
+		WHERE bno=#{bno} and mno=#{mno}
+	</select>
+
+	<insert id="increaseLike">
+		INSERT INTO board_likes(mno, bno)
+		VALUES(#{mno},#{bno})
+	</insert>
+
+	<delete id="decreaseLike">
+		DELETE FROM board_likes
+		WHERE bno=#{bno} and mno=#{mno}
+	</delete>
+
+	<select id="getByBno" resultMap="boardMap">
+		SELECT b.*, m.name,
+		IFNULL(l.likes, 0) AS likes
+		FROM boards b JOIN members m USING (mno)
+		LEFT JOIN (
+		SELECT bno, COUNT(*) AS likes FROM board_likes GROUP BY bno
+		) l USING (bno)
+		WHERE bno=#{bno}
+	</select>
+
+	<delete id="remove">
+		DELETE FROM boards WHERE bno=#{bno}
+	</delete>
+
+	<update id="nullLike">
+		UPDATE board_likes
+		SET bno=null
+		WHERE bno=#{bno}
+	</update>
+
+	<update id="removeAll">
+		DELETE FROM boards WHERE mno=#{mno}
+	</update>
+
+	<!-- 이미지 등록 및 조회 -->
+
+	<insert id="addImage" parameterType="map">
+		INSERT INTO board_images (bno, url, seq)
+		VALUES (#{bno}, #{url}, #{seq})
+	</insert>
+
+	<select id="getImagesByBno" resultType="string">
+		SELECT url
+		FROM board_images
+		WHERE bno=#{bno}
+		ORDER BY seq
+	</select>
+
+	<delete id="removeImagesByBno">
+		DELETE FROM board_images
+		WHERE bno=#{bno}
+	</delete>
+
+	<!-- 태그 등록 및 조회 -->
+	<select id="findTagByName" resultType="int">
+		SELECT tag_id FROM tags
+		WHERE name=#{name}
+	</select>
+
+	<insert id="addTag" parameterType="string">
+		INSERT INTO tags (name)
+		VALUES (#{name})
+	</insert>
+
+	<insert id="addBoardTag" parameterType="map">
+		INSERT INTO board_tags (bno, tag_id)
+		VALUES (#{bno}, #{tagId})
+	</insert>
+
+	<delete id="removeBoardTagsByBno">
+		DELETE FROM board_tags
+		WHERE bno=#{bno}
+	</delete>
+
+	<select id="getTagsByBno" resultType="string">
+		SELECT t.name
+		FROM board_tags bt JOIN tags t
+		ON bt.tag_id = t.tag_id
+		WHERE bt.bno=#{bno}
+	</select>
+
+	<resultMap type="Board" id="boardMap">
+		<id column="bno" property="bno" />
+		<result column="mno" property="mno" />
+		<result column="name" property="author" />
+		<result column="profile_url" property="profileUrl" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="likes" property="likes" />
+		<result column="created_at" property="createdAt" />
+		<result column="updated_at" property="updatedAt" />
+		<result column="comment_count" property="commentCount" />
+		<result column="liked" property="liked"/>
+	</resultMap>
+
+</mapper>

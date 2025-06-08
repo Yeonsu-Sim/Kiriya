@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.MemberDao">
+
+    <!-- Result mapping for Member DTO -->
+    <resultMap id="memberMap" type="com.ssafy.kiriya.model.dto.Member">
+        <id property="mno" column="mno" />
+        <result property="name" column="name" />
+        <result property="email" column="email" />
+        <result property="password" column="password" />
+        <result property="profileUrl" column="profile_url" />
+    </resultMap>
+    
+    <resultMap type="Member" id="memberRoleMap" extends="memberMap">
+        <association property="role" column="no" resultMap="com.ssafy.kiriya.model.dao.RoleDao.roleMap"></association>
+    </resultMap>
+
+    <!-- Insert a new member and return generated mno -->
+    <insert id="add" parameterType="com.ssafy.kiriya.model.dto.Member" useGeneratedKeys="true" keyProperty="mno">
+        INSERT INTO members (name, email, password, role)
+        VALUES (#{name}, #{email}, #{password}, #{role.no})
+    </insert>
+
+    <!-- Select a member by mno -->
+    <select id="get" resultMap="memberRoleMap">
+        SELECT mno, name, email, password, no, role_name, profile_url
+        FROM members join roles on (members.role = roles.no)
+        WHERE mno = #{mno}
+    </select>
+
+    <!-- Update member details -->
+    <update id="set" parameterType="com.ssafy.kiriya.model.dto.Member">
+        UPDATE members
+           SET name = #{name},
+               email = #{email},
+               password = #{password},
+               role = #{role.no}
+         WHERE mno = #{mno}
+    </update>
+    
+    <update id="updateAvatar">
+    	UPDATE members
+    	SET profile_url = #{profileUrl}
+    	WHERE mno = #{mno}
+    </update>
+
+    <!-- Delete a member by mno -->
+    <delete id="remove">
+        DELETE FROM members
+        WHERE mno = #{mno}
+    </delete>
+
+    <!-- Select a member by email -->
+    <select id="getByEmail" resultMap="memberRoleMap">
+        SELECT mno, name, email, password, no, role_name
+        FROM members join roles on (members.role = roles.no)
+        WHERE email = #{email}
+    </select>
+
+	<select id="selectByEmail" parameterType="string" resultType="Member">
+		SELECT mno, name, email, password, role
+		FROM members
+		WHERE email = #{email}
+	</select>
+</mapper>

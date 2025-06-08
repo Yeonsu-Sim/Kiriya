@@ -1,0 +1,66 @@
+@use './variables' as *;
+@use './typography' as *;
+
+.router-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.gradient-btn {
+  border-radius: 25px !important;
+  background: linear-gradient(135deg, #dcc3f3 0%, #7f80bf 100%) !important;
+  color: #fff !important;
+  text-align: center !important;
+  font-weight: 500 !important;
+  height: auto !important;
+  padding: 15px !important;
+  min-width: 80px !important;
+}
+
+.bg-gradient {
+  background: linear-gradient(135deg, #dcc3f3 0%, #7f80bf 100%) !important;
+}
+
+.scroll-pane {
+  overflow-y: auto;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #DFDFDF transparent;
+}
+
+.scroll-pane::-webkit-scrollbar {
+  width: 6px; /* 스크롤바 너비 */
+}
+
+.scroll-pane::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-pane::-webkit-scrollbar-thumb {
+  background-color: #DFDFDF;
+  border-radius: 6px;
+}
+
+.custom-tooltip {
+  background-color: rgb(255,255,255,0.5) !important;
+  backdrop-filter: blur(5px) !important;
+  color: gray !important;
+  font-size: 12px !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ✅ background blur 효과 */
+.bg-blur {
+  backdrop-filter: blur(3px) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  border-radius: 6px !important;
+}
+
+.overflow-ellipsis {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}

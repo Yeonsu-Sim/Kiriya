@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.AttractionDao">
+
+	<select id="getByFilter" parameterType="Filter" resultMap="attractionMap">
+	    SELECT a.*, IFNULL(l.likes, 0) AS likes
+	    FROM attractions a LEFT JOIN (
+	        SELECT ano, COUNT(*) AS likes FROM attraction_likes GROUP BY ano
+	    ) l ON a.no = l.ano
+	    <trim prefix="where" prefixOverrides="or|and">
+	        <if test="sidoCode != null and sidoCode != ''">
+	            and area_code = #{sidoCode}
+	        </if>
+	        <if test="gunguCode != null and gunguCode != ''">
+	            and si_gun_gu_code = #{gunguCode}
+	        </if>
+	        <if test="contentTypeList != null and contentTypeList.size > 0">
+	            and content_type_id IN
+	            <foreach item="item" collection="contentTypeList" open="(" separator="," close=")">
+	                #{item}
+	            </foreach>
+	        </if>
+	        <if test="keyword != null and keyword != ''">
+	            and title LIKE CONCAT('%',#{keyword},'%')
+	        </if>
+	    </trim>
+	</select>
+
+	
+	<select id="getAnoByContentId">
+		SELECT no FROM attractions
+		WHERE content_id=#{contentId}
+	</select>
+	
+	<select id="getByContentId" resultMap="attractionDetailMap">
+		SELECT a.*, IFNULL(l.likes, 0) AS likes
+		FROM attractions a LEFT JOIN (
+			SELECT ano, COUNT(*) AS likes FROM attraction_likes GROUP BY ano
+		) l ON a.no = l.ano
+		WHERE content_id = #{contentId}
+	</select>
+	
+	<select id="getByMno" resultMap="attractionMap">
+		SELECT a.*, IFNULL(l.likes, 0) AS likes
+		FROM attractions a JOIN (
+			SELECT ano, COUNT(*) AS likes
+			FROM attraction_likes 
+			WHERE mno = #{mno}
+			GROUP BY ano, liked_at
+			ORDER BY liked_at DESC
+		) l ON a.no = l.ano
+	</select>
+	
+	<select id="getLike">
+		SELECT COUNT(*) FROM attraction_likes
+		WHERE ano=#{ano} and mno=${mno}
+	</select>
+	
+	<insert id="increaseLike">
+   		INSERT INTO attraction_likes(mno, ano)
+   		VALUES(#{mno},#{ano})
+    </insert>
+    
+    <delete id="decreaseLike">
+    	DELETE FROM attraction_likes
+    	WHERE ano=#{ano} and mno=#{mno}
+    </delete>
+    
+    <select id="getAllLikes">
+    	SELECT count(*)
+    	FROM attraction_likes
+    	WHERE ano=#{ano}
+    </select>
+	
+	<select id="getNoByContentId">
+		SELECT no FROM attractions
+		WHERE content_id=#{contentId}
+	</select>
+    
+    <resultMap id="attractionMap" type="Attraction">
+    	<id column="no" property="no" />
+    	<result column="content_id" property="contentId" />
+    	<result column="title" property="title" />
+    	<result column="content_type_id" property="contentTypeId" />
+    	<result column="area_code" property="areaCode" />
+    	<result column="si_gun_gu_code" property="siGunGuCode" />
+    	<result column="first_image1" property="firstImage1" />
+    	<result column="first_image2" property="firstImage2" />
+    	<result column="map_level" property="mapLevel" />
+    	<result column="latitude" property="latitude" />
+    	<result column="longitude" property="longitude" />
+    	<result column="addr1" property="addr1" />
+    	<result column="addr2" property="addr2" />
+    	<result column="likes" property="likes" />
+    </resultMap>
+    
+    <resultMap id="attractionDetailMap" type="Attraction" extends="attractionMap">
+    	<result column="tel" property="tel" />
+    	<result column="homepage" property="homepage" />
+    	<result column="overview" property="overview" />
+    </resultMap>
+</mapper>

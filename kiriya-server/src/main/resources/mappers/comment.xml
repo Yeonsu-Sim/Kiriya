@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.CommentDao">
+<!-- 댓글 등록 -->
+<insert id="add" parameterType="Comment" useGeneratedKeys="true" keyProperty="cno">
+    INSERT INTO comments (bno, mno, content)
+    VALUES (#{bno}, #{mno}, #{content})
+</insert>
+
+<!-- 댓글 조회 (작성자 정보까지) -->
+<select id="getCommentsByBno" resultMap="commentMap">
+    SELECT c.cno, c.bno, c.mno, m.name, m.profile_url,
+           c.content, c.created_at, c.updated_at
+      FROM comments c
+      JOIN members m ON c.mno = m.mno
+     WHERE c.bno = #{bno}
+     ORDER BY c.created_at ASC
+</select>
+
+<!-- 댓글 수정 -->
+<update id="update" parameterType="Comment">
+	UPDATE comments
+	SET content = #{content}
+	WHERE cno = #{cno}
+</update>
+
+<!-- 댓글 삭제 -->
+<delete id="delete">
+    DELETE FROM comments WHERE cno = #{cno}
+</delete>
+
+<resultMap id="commentMap" type="Comment">
+	<id column="cno" property="cno" />
+	<result column="bno" property="bno" />
+	<result column="mno" property="mno" />
+	<result column="name" property="author" />
+	<result column="profile_url" property="authorProfileUrl" />
+	<result column="content" property="content" />
+	<result column="created_at" property="createdAt" />
+	<result column="updated_at" property="updatedAt" />
+</resultMap>
+
+</mapper>

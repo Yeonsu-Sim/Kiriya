@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.RouteDao">
+
+    <resultMap id="routeMap" type="com.ssafy.kiriya.model.dto.map.Route">
+        <id property="no" column="no" />
+        <result property="contentId" column="content_id" />
+        <result property="contentTypeId" column="content_type_id" />
+        <result property="title" column="title" />
+        <result property="addr1" column="addr1" />
+        <result property="longitude" column="longitude" />
+        <result property="latitude" column="latitude" />
+        <result property="firstImage1" column="first_image1" />
+        <result property="firstImage2" column="first_image2" />
+        <result property="startDate" column="start_date" />
+        <result property="endDate" column="end_date" />
+    </resultMap>
+    
+    <insert id="add" useGeneratedKeys="true" keyProperty="no">
+        INSERT INTO plan_attractions (pno, ano, sequence_order, start_date, end_date)
+        VALUES (#{pno}, #{ano}, #{sequenceOrder}, #{startDate}, #{endDate})
+    </insert>
+    
+    <select id="getByNo" resultMap="routeMap">
+        SELECT pa.no, pno, a.content_id, a.content_type_id, title, addr1, longitude, latitude, start_date, end_date, first_image1, first_image2
+        FROM plan_attractions pa LEFT JOIN attractions a ON (pa.ano=a.no)
+        WHERE no = #{no}
+    </select>
+    
+    <select id="getByPno" resultMap="routeMap">
+    	SELECT pa.no, pno, a.content_id, a.content_type_id, title, addr1, longitude, latitude, start_date, end_date, first_image1, first_image2
+        FROM plan_attractions pa LEFT JOIN attractions a ON (pa.ano=a.no)
+        WHERE pno = #{pno}
+       	ORDER BY sequence_order ASC
+    </select>
+
+    <update id="set">
+    	UPDATE plan_attractions
+    	SET start_date=#{startDate}, end_date=#{endDate}
+    	WHERE no = #{no}
+    </update>
+
+    <delete id="remove">
+        DELETE FROM plan_attractions
+        WHERE no = #{no}
+    </delete>
+    
+    <delete id="removeAll">
+        DELETE FROM plan_attractions
+        WHERE pno = #{pno}
+    </delete>
+    
+</mapper>

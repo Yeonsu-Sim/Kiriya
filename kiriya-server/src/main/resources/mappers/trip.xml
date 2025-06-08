@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.TripDao">
+
+	<resultMap id="tripMap"
+		type="com.ssafy.kiriya.model.dto.Trip">
+		<id property="tno" column="tno" />
+		<result property="gno" column="gno" />
+		<result property="mno" column="mno" />
+		<result property="title" column="title" />
+		<result property="description" column="description" />
+		<result property="startDate" column="start_date" />
+		<result property="endDate" column="end_date" />
+		<result property="thumbnailUrl" column="thumbnail_url" />
+		
+	</resultMap>
+
+
+	<insert id="add" useGeneratedKeys="true" keyProperty="tno">
+		INSERT INTO
+		trips (mno, title, description, start_date, end_date, thumbnail_url)
+		VALUES (#{mno},
+		#{title}, #{description}, #{startDate}, #{endDate}, #{thumbnailUrl})
+	</insert>
+	
+	<select id="getAll" resultMap="tripMap">
+		SELECT tno, gno, mno, title, description, start_date, end_date, thumbnail_url
+		FROM trips
+	</select>
+
+	<select id="get" resultMap="tripMap">
+		SELECT tno, gno, mno, title, description, start_date, end_date, thumbnail_url
+		FROM trips
+		WHERE tno = #{tno}
+	</select>
+
+	<select id="getByMno" resultMap="tripMap">
+		SELECT tno, gno, mno, title,
+		description, start_date, end_date, thumbnail_url
+		FROM trips
+		WHERE mno = #{mno} AND (gno = 0 or gno is null)
+		ORDER BY start_date ASC, created_at DESC;
+	</select>
+
+	<update id="set">
+		UPDATE trips
+		SET title =#{title},
+		description=#{description}, start_date=#{startDate},
+		end_date=#{endDate}, thumbnail_url=#{thumbnailUrl}
+		WHERE tno = #{tno}
+	</update>
+
+	<delete id="remove">
+		DELETE FROM trips
+		WHERE tno = #{tno}
+	</delete>
+
+	<insert id="copyTrip" parameterType="map"
+		useGeneratedKeys="true" keyProperty="tno">
+		INSERT INTO trips (mno, title, description, start_date, end_date, thumbnail_url, gno)
+		SELECT
+		mno, title, description, start_date, end_date, thumbnail_url,
+		#{gno}
+		FROM trips
+		WHERE tno = #{originalTno}
+		<selectKey keyProperty="tno" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+
+
+	<select id="getByGno" resultMap="tripMap">
+		SELECT tno, gno, mno, title,
+		description, start_date, end_date, thumbnail_url
+		FROM trips
+		WHERE gno = #{gno}
+		ORDER BY
+		start_date ASC, created_at DESC
+	</select>
+</mapper>

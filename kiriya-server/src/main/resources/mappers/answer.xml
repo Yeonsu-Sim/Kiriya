@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.AnswerDao">
+
+  <!-- 답변 등록 -->
+  <insert id="add" parameterType="Answer" useGeneratedKeys="true" keyProperty="answerNo">
+    INSERT INTO answers(question_no, mno, content)
+    VALUES(#{questionNo}, #{mno}, #{content})
+  </insert>
+
+  <!-- 단일 답변 조회 -->
+  <select id="getByAnswerNo" parameterType="int" resultMap="answerMap">
+    SELECT a.answer_no,
+           a.question_no,
+           a.mno,
+           a.content,
+           a.created_at,
+           a.updated_at,
+           m.name
+    FROM answers a
+    JOIN members m USING(mno)
+    WHERE a.answer_no = #{answerNo}
+  </select>
+
+  <!-- 특정 질문의 모든 답변 조회 -->
+  <select id="getByQuestionNo" parameterType="int" resultMap="answerMap">
+    SELECT a.answer_no,
+           a.question_no,
+           a.mno,
+           a.content,
+           a.created_at,
+           a.updated_at,
+           m.name,
+           m.profile_url
+    FROM answers a
+    JOIN members m USING(mno)
+    WHERE a.question_no = #{questionNo}
+    ORDER BY a.created_at ASC
+  </select>
+
+  <!-- 답변 수정 -->
+  <update id="update" parameterType="Answer">
+    UPDATE answers
+       SET content = #{content}
+     WHERE answer_no = #{answerNo}
+  </update>
+
+  <!-- 답변 삭제 -->
+  <delete id="delete" parameterType="int">
+    DELETE FROM answers
+     WHERE answer_no = #{answerNo}
+  </delete>
+
+  <!-- Mapper 출력→DTO 매핑 -->
+  <resultMap id="answerMap" type="Answer">
+    <id     column="answer_no"    property="answerNo"/>
+    <result column="question_no"  property="questionNo"/>
+    <result column="mno"          property="mno"/>
+    <result column="name"         property="author"/>
+    <result column="profile_url"  property="authorProfileUrl"/>
+    <result column="content"      property="content"/>
+    <result column="created_at"   property="createdAt"/>
+    <result column="updated_at"   property="updatedAt"/>
+  </resultMap>
+
+</mapper>

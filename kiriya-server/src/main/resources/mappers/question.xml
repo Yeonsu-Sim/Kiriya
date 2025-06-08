@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.QuestionDao">
+
+  <!-- 질문 등록 -->
+  <insert id="add" parameterType="Question" useGeneratedKeys="true" keyProperty="questionNo">
+    INSERT INTO questions(title, content, mno)
+    VALUES(#{title}, #{content}, #{mno})
+  </insert>
+
+  <!-- 단일 질문 조회 -->
+  <select id="getByQuestionNo" parameterType="int" resultMap="questionMap">
+    SELECT q.question_no,
+           q.title,
+           q.content,
+           q.mno,
+           q.created_at,
+           q.updated_at,
+           m.name,
+           m.profile_url
+    FROM questions q
+    JOIN members m USING(mno)
+    WHERE q.question_no = #{questionNo}
+  </select>
+
+  <!-- 전체 질문 조회 -->
+  <select id="getAllQuestions" resultMap="questionMap">
+    SELECT q.question_no,
+           q.title,
+           q.content,
+           q.mno,
+           q.created_at,
+           q.updated_at,
+           m.name
+    FROM questions q
+    JOIN members m USING(mno)
+    ORDER BY q.created_at DESC
+  </select>
+
+  <!-- 질문 수정 -->
+  <update id="update" parameterType="Question">
+    UPDATE questions
+       SET title   = #{title},
+           content = #{content}
+     WHERE question_no = #{questionNo}
+  </update>
+
+  <!-- 질문 삭제 -->
+  <delete id="delete" parameterType="int">
+    DELETE FROM questions
+     WHERE question_no = #{questionNo}
+  </delete>
+
+  <!-- Mapper 출력→DTO 매핑 -->
+  <resultMap id="questionMap" type="Question">
+    <id     column="question_no" property="questionNo"/>
+    <result column="mno"           property="mno"/>
+    <result column="name"          property="author"/>
+    <result column="profile_url"   property="authorProfileUrl"/>
+    <result column="title"         property="title"/>
+    <result column="content"       property="content"/>
+    <result column="created_at"    property="createdAt"/>
+    <result column="updated_at"    property="updatedAt"/>
+  </resultMap>
+
+</mapper>

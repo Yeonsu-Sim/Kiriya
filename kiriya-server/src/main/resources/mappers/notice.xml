@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.kiriya.model.dao.NoticeDao">
+
+	<insert id="add" parameterType="Notice" useGeneratedKeys="true" keyProperty="nno">
+		INSERT INTO notices(mno,title,content)
+		VALUES(#{mno},#{title},#{content})
+	</insert>
+
+    <select id="getBytitle" resultMap="noticeMap">
+        SELECT mno,nno,title,content,created_at,updated_at,name
+        FROM notices JOIN members USING (mno)
+        WHERE title Like #{title}
+    </select>
+
+    <select id="getAllNotices" resultMap="noticeMap">
+    	SELECT mno,nno,title,content,created_at,updated_at,name
+    	FROM notices JOIN members USING (mno)
+    	ORDER BY created_at DESC
+    </select>
+    
+    <update id="set">
+        UPDATE notices SET title=#{title}, content=#{content} where nno=#{nno}
+    </update>
+	
+	<select id="getByNno" resultMap="noticeMap">
+		SELECT mno,nno,title,content,created_at,updated_at,name
+		FROM notices JOIN members USING (mno)
+		WHERE nno=#{nno}
+	</select>
+
+    <delete id="remove">
+        DELETE FROM notices WHERE nno=#{nno}
+    </delete>
+
+    <update id="removeAll">
+        DELETE FROM notices WHERE mno=#{mno}
+    </update>
+    
+    
+	<resultMap type="Notice" id="noticeMap">
+		<id column="nno" property="nno" />
+		<result column="mno" property="mno" />
+		<result column="name" property="author" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="created_at" property="createdAt" />
+		<result column="updated_at" property="updatedAt" />
+	</resultMap>
+	
+</mapper>
