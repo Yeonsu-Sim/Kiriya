@@ -182,37 +182,37 @@ kiriya/
     <tr>
       <td>🔑 로그인, 회원가입, 비밀번호 찾기, 회원 정보 수정</td>
       <td>
-        <video src="./demos/로그인_회원가입_비밀번호찾기_프로필수정.mp4" width="480" controls></video>
+        <video src="./demos/로그인_회원가입_비밀번호찾기_프로필수정.mp4?raw=true" width="480" controls></video>
       </td>
     </tr>
     <tr>
       <td>🧭 경로 저장, 수정, 조회</td>
       <td>
-        <video src="./demos/경로저장_수정_조회.mp4" width="480" controls></video>
+        <video src="./demos/경로저장_수정_조회.mp4?raw=true" width="480" controls></video>
       </td>
     </tr>
     <tr>
       <td>📅 여행 일정 삭제 및 조회</td>
       <td>
-        <video src="./demos/일정삭제_여행조회.mp4" width="480" controls></video>
+        <video src="./demos/일정삭제_여행조회.mp4?raw=true" width="480" controls></video>
       </td>
     </tr>
     <tr>
       <td>👥 여행 수정 및 그룹 등록</td>
       <td>
-        <video src="./demos/여행수정_그룹등록.mp4" width="480" controls></video>
+        <video src="./demos/여행수정_그룹등록.mp4?raw=true" width="480" controls></video>
       </td>
     </tr>
     <tr>
       <td>🤝 그룹에 여행 공유</td>
       <td>
-        <video src="./demos/그룹에_여행공유.mp4" width="480" controls></video>
+        <video src="./demos/그룹에_여행공유.mp4?raw=true" width="480" controls></video>
       </td>
     </tr>
     <tr>
       <td>📰 피드 서핑</td>
       <td>
-        <video src="./demos/피드.mp4" width="480" controls></video>
+        <video src="./demos/피드.mp4?raw=true" width="480" controls></video>
       </td>
     </tr>
     <tr>
