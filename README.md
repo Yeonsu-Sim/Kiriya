@@ -171,55 +171,12 @@ kiriya/
 
 ## 📷 DEMO
 
-<table>
-  <thead>
-    <tr>
-      <th>기능 시연 내용</th>
-      <th>데모 영상</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>🔑 로그인, 회원가입, 비밀번호 찾기, 회원 정보 수정</td>
-      <td>
-        <video src="./demos/로그인_회원가입_비밀번호찾기_프로필수정.mp4?raw=true" width="480" controls></video>
-      </td>
-    </tr>
-    <tr>
-      <td>🧭 경로 저장, 수정, 조회</td>
-      <td>
-        <video src="./demos/경로저장_수정_조회.mp4?raw=true" width="480" controls></video>
-      </td>
-    </tr>
-    <tr>
-      <td>📅 여행 일정 삭제 및 조회</td>
-      <td>
-        <video src="./demos/일정삭제_여행조회.mp4?raw=true" width="480" controls></video>
-      </td>
-    </tr>
-    <tr>
-      <td>👥 여행 수정 및 그룹 등록</td>
-      <td>
-        <video src="./demos/여행수정_그룹등록.mp4?raw=true" width="480" controls></video>
-      </td>
-    </tr>
-    <tr>
-      <td>🤝 그룹에 여행 공유</td>
-      <td>
-        <video src="./demos/그룹에_여행공유.mp4?raw=true" width="480" controls></video>
-      </td>
-    </tr>
-    <tr>
-      <td>📰 피드 서핑</td>
-      <td>
-        <video src="./demos/피드.mp4?raw=true" width="480" controls></video>
-      </td>
-    </tr>
-    <tr>
-      <td>💬 고객센터&nbsp;(공지사항&nbsp;&amp;&nbsp;QnA)</td>
-      <td>
-        <video src="./demos/고객센터.mp4" width="480" controls></video>
-      </td>
-    </tr>
-  </tbody>
-</table>
+| 기능 시연 내용                     | 영상 링크                                                   |
+| ---------------------------- | ------------------------------------------------------- |
+| 🔑 로그인, 회원가입, 비밀번호찾기, 회원정보수정 | ![](./demos/로그인_회원가입_비밀번호찾기_프로필수정.gif)        |
+| 🧭 경로 저장, 수정, 조회             | ![](./demos/경로저장_수정_조회.gif)                      |
+| 📅 여행 일정 삭제 및 조회             | ![](./demos/일정삭제_여행조회.gif)                       |
+| 👥 여행 수정 및 그룹 등록             | ![](./demos/여행수정_그룹등록.gif)                     |
+| 🤝 그룹에 여행 공유                 | ![](./demos/그룹에_여행공유.gif)                        |
+| 📰 피드 서핑                 | ![](./demos/피드.gif)
+| 💬 고객센터 (공지사항 & QnA)         | ![](./demos/고객센터.gif)                             |
